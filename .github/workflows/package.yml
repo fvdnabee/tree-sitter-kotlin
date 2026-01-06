@@ -1,0 +1,13 @@
+name: Package packages
+
+on:
+  push:
+    # tags: ["*"]
+
+concurrency:
+  group: ${{github.workflow}}-${{github.ref}}
+  cancel-in-progress: true
+
+jobs:
+  npm:
+    uses: ./.github/workflows/package-npm.yml

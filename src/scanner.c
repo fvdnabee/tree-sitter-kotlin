@@ -37,7 +37,8 @@ static bool scan_word(TSLexer *lexer, const char *const word) {
 static bool scan_words(TSLexer *lexer, const char words[MAX_WORDS][MAX_WORD_SIZE], char scanned_word[16],
                        uint8_t *index) {
     if (!scanned_word[0]) {
-        for (uint8_t i = 0; i < MAX_WORD_SIZE - 1; i++) {
+        uint8_t i = 0;
+        for (; i < MAX_WORD_SIZE - 1; i++) {
             if (!iswalpha(lexer->lookahead)) {
                 if (i == 0) {
                     return false;
@@ -47,10 +48,11 @@ static bool scan_words(TSLexer *lexer, const char words[MAX_WORDS][MAX_WORD_SIZE
             scanned_word[i] = (char)lexer->lookahead;
             skip(lexer);
         }
+        scanned_word[i] = '\0';  // must be null terminated for strcmp
     }
 
     for (uint8_t i = 0; i < MAX_WORDS; i++) {
-        if (strncmp(scanned_word, words[i], MAX_WORD_SIZE) == 0) {
+        if (strcmp(scanned_word, words[i]) == 0) {
             if (index != NULL) {
                 *index = i;
             }
